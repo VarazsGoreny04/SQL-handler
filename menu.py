@@ -21,7 +21,7 @@ class Menu:
 
 	def open_database(self: Self) -> None:
 		print("Give the file path of the .db file: ")
-		file_path: str = input()
+		file_path: str = StringWithRangeLengthInputHandler(1, 1024).input_while_none("\nIncorrect format! Try again!")
 		print("\n")
 
 		self.database = connect(file_path)
@@ -32,12 +32,13 @@ class Menu:
 		
 		self.menuPoints = self.create_options()
 		options: set[str] = [menuPoint.name for menuPoint in self.menuPoints]
+		longestOption = max([len(option) for option in options])
 		
 		text: str = ""
 		while text != "exit":
 			print("What would you like to do?")
 			for menuPoint in self.menuPoints:
-				print(menuPoint.__str__())
+				print(menuPoint.str_withpadding(longestOption - len(menuPoint.name)))
 
 			text = MultiOptionInputHandler(options, False).input_while_none("\nNo such menu point exists! Try again!")
 			print("\n")
@@ -49,7 +50,7 @@ class Menu:
 	def close_database(self: Self) -> None:
 		self.menuPoints = None
 
-		#self.database.commit()
+		self.database.commit()
 		self.database = self.database.close()
 
 	def run(self: Self) -> None:

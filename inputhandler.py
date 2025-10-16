@@ -1,7 +1,10 @@
-from typing import Self
+from typing import Self, Callable
 from datetime import date
 
 class InputHandler:
+	
+	def __init__(self: Self) -> None:
+		raise NotImplementedError("This method needs to be implemented in a subclass!")
 
 	def input(self: Self) -> str | None:
 		raise NotImplementedError("This method needs to be implemented in a subclass!")
@@ -24,28 +27,19 @@ class MultiOptionInputHandler(InputHandler):
 	def input(self: Self) -> str | None:
 		text = input()
 
-		if self.caseSensitive:
+		if not self.caseSensitive:
 			text = text.lower()
 
-		for option in ([option.lower() for option in self.options] if self.caseSensitive else self.options):
-			if text == option:
-				return text
+		for option in self.options:
+			if (option if self.caseSensitive else option.lower()) == text:
+				return option
 		
 		return None
 	
-"""class FunctionBasedInputHandler(InputHandler):
+class YesNoInputHandler(MultiOptionInputHandler):
 
-	def __init__(self: Self, func: function, caseSensitive = True) -> None:
-		self.caseSensitive = caseSensitive
-		self.func = func
-
-	def input(self: Self) -> str | None:
-		text = input()
-
-		if self.caseSensitive:
-			text = text.lower()
-
-		return (text if self.func(text) else None)"""
+	def __init__(self: Self) -> None:
+		super().__init__(["yes", "no"], False)
 	
 class DateInputHandler(InputHandler):
 
@@ -68,3 +62,23 @@ class IntInputHandler(InputHandler):
 			return int(input())
 		except ValueError:
 			return None
+	
+class FunctionBasedInputHandler(InputHandler):
+
+	def __init__(self: Self, func: Callable[[str], bool]) -> None:
+		self.func = func
+
+	def input(self: Self) -> str | None:
+		text = input()
+
+		return (text if self.func(text) else None)
+	
+class StringWithExactLengthInputHandler(FunctionBasedInputHandler):
+
+	def __init__(self: Self, length: int) -> None:
+		super().__init__(lambda text: len(text) == length)
+		
+class StringWithRangeLengthInputHandler(FunctionBasedInputHandler):
+
+	def __init__(self: Self, minLength: int, maxLength: int) -> None:
+		super().__init__(lambda text: minLength <= len(text) <= maxLength)

@@ -9,12 +9,12 @@ class AirplaneMenu(Menu):
 
 	def __init__(self: Self) -> None:
 		database: Connection = connect("./airplanes.db3")
-		menuPoints: MenuPoint = [
+		menuPoints: set[MenuPoint] = [
 			ListDatabaseInfoPoint(database),
 			ListAllTableNamesPoint(database),
 			ListAllTablesPoint(database),
-			#ListTableByNamePoint(database),
-			#InsertRecordPoint(database),
+			ListTableByNamePoint(database),
+			# InsertRecordPoint(database),
 			ListBoeingPlanesPoint(database),
 			InsertPlaneRecordPoint(database),
 			ReplaceBoiengPlanesPoint(database),
