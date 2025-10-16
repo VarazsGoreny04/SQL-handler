@@ -34,9 +34,6 @@ class MenuPoint:
 	
 	def sql_selectandtostring(self: Self, sqlStatement: str) -> str | OperationalError | TypeError:
 		return self.tostring_selected(self.sql_select(sqlStatement))
-	
-	def sql_selectandtofile(self: Self, sqlStatement: str) -> str | OperationalError | TypeError:############################################# NEM CSINÁL JELENLEG SEMMIT
-		return self.tostring_selected(self.sql_select(sqlStatement))
 
 	def tostring_table(self: Self, tableName: str) -> str:
 		try:
@@ -66,14 +63,12 @@ class MenuPoint:
 			print(f"\n{e}. File access aborted.\n\n")
 			
 	def writetofile_sql_select(self: Self, sqlStatement: str, tableName: str | None = None) -> None:
-		print()
-
 		try:
 			selected: tuple[list[str],list[tuple]] = self.sql_select(sqlStatement)
 		except OperationalError:
-			return "No such table exists!\n\n"
+			return "\nNo such table exists!\n\n"
 
-		print(self.tostring_selected(selected, tableName))
+		print(f"\n{self.tostring_selected(selected, tableName)}")
 
 		print("Do you want to write it out into a file? |yes| or |no|?")
 		text: str = YesNoInputHandler().input_while_none("\nIncorrect input! |yes| or |no|?")

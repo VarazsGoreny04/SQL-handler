@@ -1,5 +1,5 @@
 from typing import Self
-from sqlite3 import Connection, OperationalError, IntegrityError
+from sqlite3 import Connection, OperationalError
 from menupoint import MenuPoint
 from inputhandler import *
 
