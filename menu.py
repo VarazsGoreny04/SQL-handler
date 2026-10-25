@@ -4,12 +4,26 @@ from sqlite3 import Connection, connect
 from menupoint import *
 
 class Menu:
+	"""A menu with customizable menu points."""
 
 	def __init__(self: Self, database: Connection | None = None, menuPoints: set[MenuPoint] | None = None) -> None:
+		"""
+		Constructs a Menu.
+
+		Parameters:
+			database (Connection | None): The database of the menu. (default is None)
+			menuPoints (set[MenuPoint] | None): The menu points of the menu. (default is None)
+		"""
 		self.database = database
 		self.menuPoints = menuPoints
 
 	def create_options(self: Self) -> set[MenuPoint]:
+		"""
+		Creates a list of menu points for a menu.
+
+		Returns:
+        	set[MenuPoint]: The created menu points.
+        """
 		return [
 			ListDatabaseInfoPoint(self.database),
 			ListAllTableNamesPoint(self.database),
@@ -20,6 +34,8 @@ class Menu:
 		]
 
 	def open_database(self: Self) -> None:
+		"""Opens a database to be used by the menu."""
+
 		print("Give the file path of the .db file: ")
 		file_path: str = StringWithRangeLengthInputHandler(1, 1024).input_while_none("\nIncorrect format! Try again!")
 		print("\n")
@@ -27,6 +43,8 @@ class Menu:
 		self.database = connect(file_path)
 
 	def manage_database(self: Self) -> None:
+		"""Asks for a name of a menu point and then runs it if it exists."""
+
 		if self.database is None:
 			return
 		
@@ -48,12 +66,16 @@ class Menu:
 					menuPoint.run()
 
 	def close_database(self: Self) -> None:
+		"""Closes the database used by the menu."""
+
 		self.menuPoints = None
 
 		self.database.commit()
 		self.database = self.database.close()
 
 	def run(self: Self) -> None:
+		"""Runs the menu."""
+
 		system('cls' if name == 'nt' else 'clear')
 
 		text: str = "open"
