@@ -7,8 +7,3 @@ def main():
 
 if __name__ == "__main__":
 	main()
-
-
-# Todo lista:
-# - Függvény- és osztályleírások elkészítése
-# - Absztrakt osztályok használata

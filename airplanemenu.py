@@ -6,7 +6,6 @@ from menupoint import *
 from airplanemenupoint import *
 
 class AirplaneMenu(Menu):
-
 	def __init__(self: Self) -> None:
 		database: Connection = connect("./airplanes.db3")
 		menuPoints: set[MenuPoint] = [
@@ -27,7 +26,8 @@ class AirplaneMenu(Menu):
 	def create_options(self: Self) -> set[MenuPoint]:
 		return self.menuPoints
 	
-	def run(self: Self):
+	def run(self: Self) -> None:
 		system('cls' if name == 'nt' else 'clear')
+
 		self.manage_database()
 		self.close_database()
